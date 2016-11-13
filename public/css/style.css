@@ -1,0 +1,35 @@
+body {
+	font:normal 12px/15px Georgia, serif;
+}
+
+
+
+
+
+
+.row {
+	margin-top:15%;
+}
+
+.body {
+	border:solid 1pt black;
+	border-radius:10px;
+	box-shadow:5px 5px 5px rgb(10,10,10);
+	max-width:95%;
+	max-height:5%;
+	margin-top:-15%;
+	padding:0px;
+	text-align:center;
+	background-color:rgba(200,170,190,.8);
+	color:rgb(5,5,5);
+}
+
+div>h3 {
+	font-size:19px;
+	font-weight:bold;
+	font-family:courier;
+}
+
+div>p {
+	font:normal 14pt georgian;
+}
