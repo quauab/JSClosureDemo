@@ -240,6 +240,10 @@ class Contact extends Person {
 		}
 	}
 	
+	setId(id) {
+		this.id = id;
+	}
+	
 	toString() { return super.toString(); }
 }
 
@@ -268,10 +272,6 @@ class User extends Contact {
 				this.username = uname;
 			}
 		}
-	}
-	
-	setId(id) {
-		this.id = id;
 	}
 	
 	getUserName() {
