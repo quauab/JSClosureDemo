@@ -32,6 +32,17 @@ $(document).ready(function(){
 		$('#edit-form-phone').val($(this).data('phone'));
 		$('#edit-form-phones').val($(this).data('phones'));
 	});
+	
+	$('.expand').on('click', function(){
+		if ($(this).hasClass('glyphicon-triangle-top')) {
+			$(this).removeClass('glyphicon glyphicon-triangle-top');
+			$(this).addClass('glyphicon glyphicon-triangle-bottom');
+		} else if ($(this).hasClass('glyphicon-triangle-bottom')) {			
+			$(this).removeClass('glyphicon glyphicon-triangle-bottom');
+			$(this).addClass('glyphicon glyphicon-triangle-top');
+		}
+	});
+	
 });
 
 function dateTime() {

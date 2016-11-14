@@ -1,27 +1,6 @@
 body {
 	font:normal 12px/15px Georgia, serif;
-}
-
-
-
-
-
-
-.row {
-	margin-top:15%;
-}
-
-.body {
-	border:solid 1pt black;
-	border-radius:10px;
-	box-shadow:5px 5px 5px rgb(10,10,10);
-	max-width:95%;
-	max-height:5%;
-	margin-top:-15%;
-	padding:0px;
-	text-align:center;
-	background-color:rgba(200,170,190,.8);
-	color:rgb(5,5,5);
+	margin-top:9%;
 }
 
 div>h3 {
@@ -32,4 +11,46 @@ div>h3 {
 
 div>p {
 	font:normal 14pt georgian;
+}
+
+
+
+
+
+
+.left {
+	height:50vh;
+	width:30vw;
+}
+
+.panel-body, li{
+	text-align:center;
+}
+
+.body {
+	max-width:95%;
+	max-height:5%;
+	padding:0px;
+	text-align:center;
+}
+
+.v-scroll {
+	overflow:scroll;
+}
+
+	
+	
+	
+	
+	
+	
+	
+
+::-webkit-scrollbar {
+    width: 0px;  /* remove scrollbar space */
+    background: transparent;  /* optional: just make scrollbar invisible */
+}
+
+::-webkit-scrollbar-thumb {
+    background: #FF0000;
 }
