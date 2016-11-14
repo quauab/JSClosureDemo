@@ -105,6 +105,10 @@ class Person {
 		return this.getFirstName() + this.getMiddleName() + this.getLastName();
 	}
 	
+	setId(id) {
+		this.id = id;
+	}
+	
 	toString() {
 		return this.getName();
 	}
@@ -238,10 +242,6 @@ class Contact extends Person {
 		} else {
 			this.phones[category] = phone;
 		}
-	}
-	
-	setId(id) {
-		this.id = id;
 	}
 	
 	toString() { return super.toString(); }
