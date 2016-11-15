@@ -313,7 +313,7 @@ let membersManager = (function(){
 				
 			for (var member in members['container']) {
 				var mObj = members['container'][member],
-					uName = mObj.username,
+					uName = mObj.uname,
 					uEmail = mObj.email;
 					
 				if (uName === username) {
