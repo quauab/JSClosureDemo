@@ -372,8 +372,11 @@ let membersManager = (function(){
 			} else {
 				for (var i = 0; i < members['container'].length; i++) {
 					var mObj = members['container'][i];
-					if (mObj.id.toString() === m) {
-						return [{'result':mObj}];
+					if (mObj.id.toString() === m ||
+						mObj.uname.trim() === m ||
+						mObj.email.trim() === m ||
+						mObj.phone.toString().trim() === m) {
+						return mObj;
 					}
 				}
 			}
