@@ -1,84 +1,278 @@
-var group = [],
-	interval = 0,
+let group = [],
 	days = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],
 	week = days,
 	months = ["January","February","March","April","May","June","July","August","September","October","November","December"],
 	calendar = months;
-//  ------------------------------------------------------------------------------
+let interval = 0;
 
 
-var msg = function(m) { alert(m); };
-	
-function makeProgressBar(minWidth, maxWidth, startWidth, delayedValue, object) {
-	if (object) {
-		var divProg = newElement('div'),
-			divProgBar = newElement('div');		
-		addAttribute('class','progress',divProg);
-		addAttribute('class', 'progress-bar progress-bar-striped active',divProgBar);
-		addAttribute('role','progressbar',divProgBar);
-		addAttribute('aria-valuenow','70',divProgBar);
-		addAttribute('aria-valuemin','0',divProgBar);
-		addAttribute('aria-valuemax','100',divProgBar);
-		addAttribute('style','width:' + minWidth + '%',divProgBar);	
-		addAttribute('id','progressBar',divProgBar);
-		appendElement(divProg,divProgBar);	
-		appendElement(object,divProg);
-		(function() {
-			var width = startWidth;
-			var id = doInterval(frame, delayedValue);
-			function frame() {
-				if (width >= maxWidth) {
-					stopInterval(id);
-					clearObject();
+
+
+
+
+
+
+
+let msg = function(m) { alert(m); };
+
+let manageContacts = (function(){
+	let contacts = {};
+	return function(c,action) {
+		if ((null === c || !(c instanceof Contact) && action === 'add')) {
+			throw new Error('Provide a valid Contact object');
+		}			
+		if (null === action || !action) {
+			throw new Error('Provide an action to perform on ' + c);
+		}			
+		if (action === 'add') {
+			if (!Object.prototype.hasOwnProperty.call(contacts,c.toString().trim())) {
+				log('\t\tAdded ' + c.toString());
+				contacts[c.toString().trim()] = c;
+			}
+		}
+		else if (action === 'search' && typeof(c) === 'string') {
+			if (c === 'all') {
+				return contacts;
+			}
+			else {
+				log('\n\t\t\t\tSearching contacts for ' + c.trim());
+				if (Object.prototype.hasOwnProperty.call(contacts,c.trim())) {
+					log('\t\tFound ' + c.trim());
+					return contacts[c.trim()];
 				} else {
-					width++;
-					addAttribute('style','width:' + width + '%',divProgBar);
-					divProgBar.innerHTML = width * 1 + '%';
+					return c.trim() + ' Not Found';
 				}
-			};
-			function clearObject() {
-				removeElements(object);
 			}
-		})();
+		} 
+		else if (action === 'remove' && (c instanceof Contact)) {
+			log('\n\t\t\t\tRemoving ' + c);
+			if (Object.prototype.hasOwnProperty.call(contacts,c.toString().trim()))
+				delete contacts[c.toString().trim()];
+		} 
+		else if (action === 'remove' && typeof(c) === 'string') {
+			log('\n\t\t\t\tRemoving ' + c);
+			if (Object.prototype.hasOwnProperty.call(contacts,c.trim()))
+				delete contacts[c.trim()];
+		}
+		return contacts;
+	}
+})();
+
+let manageUsers = (function(){
+	let users = {};
+	return function(u,action) {
+		if ((null === u || !(u instanceof User) && action === 'add')) {
+			throw new Error('Provide a valid User object');
+		}			
+		if (null === action || !action) {
+			throw new Error('Provide an action to perform on ' + u);
+		}			
+		if (action === 'add') {
+			if (!Object.prototype.hasOwnProperty.call(users,u.toString().trim())) {
+				log('\t\tAdded ' + u.toString());
+				users[u.toString().trim()] = u;
+			}
+		}
+		else if (action === 'search' && typeof(u) === 'string') {
+			if (u === 'all') {
+				return users;
+			}
+			else {
+				log('\n\t\t\t\tSearching users for ' + u.trim());
+				if (Object.prototype.hasOwnProperty.call(users,u.trim())) {
+					log('\t\tFound ' + u.trim());
+					return users[u.trim()];
+				} else {
+					return u.trim() + ' Not Found';
+				}
+			}
+		} 
+		else if (action === 'remove' && (u instanceof User)) {
+			log('\n\t\t\t\tRemoving ' + u);
+			if (Object.prototype.hasOwnProperty.call(users,u.toString().trim()))
+				delete users[u.toString().trim()];
+		} 
+		else if (action === 'remove' && typeof(u) === 'string') {
+			log('\n\t\t\t\tRemoving ' + u);
+			if (Object.prototype.hasOwnProperty.call(users,u.trim()))
+				delete users[u.trim()];
+		}
+		return users;
+	}
+})();
+
+function viewContacts(obj) {
+	for (var contact in obj) {
+		viewContact(obj[contact]);
+	}
+	log('\n');
+}
+
+function viewContact(obj) {
+	if (obj instanceof Contact) {
+		log();
+		log(obj.toString() + '\n\nEmails');
+		for (var e in obj.getEmails()) {
+			var email = obj.getEmails()[e];
+			log(cfc(e) + ': ' + email);
+		}
+		
+		log('\nPhones');
+		for (var p in obj.getPhones()) {
+			var phone = obj.getPhones()[p];
+			log(cfc(p) + ': ' + phone);
+		}
+		log();
+	}
+	else if (typeof(obj) === 'string') {
+		log();
+		log(obj);
+		log();
 	}
 }
 
-function showTaskProgress(minWidth, maxWidth, startWidth, delayedValue, object, task) {
-	if (object && (typeof task) === 'function') {
-		var divProg = newElement('div'),
-			divProgBar = newElement('div');		
-		addAttribute('class','progress',divProg);
-		addAttribute('class', 'progress-bar progress-bar-striped active',divProgBar);
-		addAttribute('role','progressbar',divProgBar);
-		addAttribute('aria-valuenow','70',divProgBar);
-		addAttribute('aria-valuemin','0',divProgBar);
-		addAttribute('aria-valuemax','100',divProgBar);
-		addAttribute('style','width:' + minWidth + '%',divProgBar);	
-		addAttribute('id','progressBar',divProgBar);
-		appendElement(divProg,divProgBar);	
-		appendElement(object,divProg);
-		(function() {
-			var width = startWidth;
-			var id = doInterval(frame, delayedValue);
-			function frame() {
-				if (width >= maxWidth) {
-					stopInterval(id);
-					clearObject();
-				} else {				
-					width++;
-					// addAttribute('style','width:' + width + '%',divProgBar);
-					// divProgBar.innerHTML = width * 1 + '%';
-					task(divProgBar);
-				}
-			};
-			function clearObject() {
-				removeElements(object);
-			}
-		})();
+function log(message = '\n') {
+	console.log(message);
+}
+	
+function numSuf(num) {
+	let index = (num.toString().length - 1);
+	let n = num.toString().substring(index);
+	switch (n) {		
+		case '1':
+			return 'st';
+			
+		case '2':
+			return 'nd';
+			
+		case '3':
+			return 'rd';
+			
+		default:
+			return 'th';
+	}
+}
+	
+function testRun(e) {
+	if (e instanceof Object) {
+		for (var x in e) {
+			var xObj = e[x];
+			log(cfc(x) + ': ' + xObj);
+		}
+	} else if (typeof(e) === 'string') {
+		log(e);
+	} else {
+		log(e);
 	}
 }
 
+let addToO = (function() {
+	let inc = {};
+	return function(i) {
+		let key = (Object.keys(inc).length += 1);
+		inc[key] = i;
+		return inc;
+	}
+})();
 
+let addToA = (function() {
+	let inc = [];
+	return function(i) {
+		inc.push(i);
+		return inc;
+	}
+})();
+
+let incByOne = (function(){
+	return function(i) {
+		return i+=1;
+	}
+})();
+
+let incByTwo = (function(){
+	return function(i) {
+		return i+=2;
+	}
+})();
+
+let incBy = (function(){
+	return function(i,x) {
+		return i+=x;
+	}
+})();
+	
+function crudTests() {
+	log('\t\t\t\tAdding new contacts');
+	var rick = new Contact(['232-786-9223','454-777-9311'],['rick@google.com'],'rick','walker');
+	var objs = manageContacts(rick,'add');
+	
+	var anita = new Contact(['978-303-4111'],['anita@test.net'],'anita','bathe','major');
+	objs = manageContacts(anita,'add');
+	
+	var jeaucque = new Contact('214-723-8796','jeac@vermon.org','jeacque','strapp');
+	objs = manageContacts(jeaucque,'add');
+	
+	jeaucque.addEmail('primary','strapp@deez.net');
+	jeaucque.addPhone('secondary','966-888-7144');
+		
+	log('\n\n');
+	
+	viewContacts(objs);
+	
+	log('\n\n');
+		
+	objs = manageContacts('Jeacque Strapp','remove');
+	viewContacts(objs);
+		
+	let name = 'Rick Walker';
+	let contact = manageContacts(name,'search');
+	viewContact(contact);
+	
+	log('\nChanging Rick Walker\'s last name to poopil');
+	contact.setLastName('poopil');
+	viewContact(contact);
+	
+	viewContacts(manageContacts('all','search'));
+}
+
+function setLastNameTest() {
+	log('\t\t\t\tAdding new contacts');
+	
+	var rick = new Contact(['232-786-9223','454-777-9311'],['rick@google.com'],'rick','walker');
+	var objs = manageContacts(rick,'add');
+	
+	var anita = new Contact(['978-303-4111'],['anita@test.net'],'anita','bathe','major');
+	objs = manageContacts(anita,'add');
+	
+	var jeaucque = new Contact('214-723-8796','jeac@vermon.org','jeacque','strapp');
+	objs = manageContacts(jeaucque,'add');
+	
+	let name = 'Rick Walker';
+	let contact = manageContacts(name,'search');
+	viewContact(contact);
+	
+	log('\nChanging Rick Walker\'s last name to poopil');
+	contact.setLastName('poopil');
+	viewContact(contact);
+}
+	
+function numSufTests() {
+	log(21 + numSuf(21));
+	log(102 + numSuf('102'));
+	log(43 + numSuf(43));
+	log(766804+ numSuf('766804'));
+	log(50000 + numSuf(50000));
+}
+	
+function createUserTest() {
+	var rick = new User('ricwalker',['009-555-8100','967-324-4491'],['ric@google.com'],'rick','walker','');
+	var users = manageUsers(rick,'add');
+	
+	log(rick.getFirstName().trim() + '\'s ' + 'Username is ' + rick.getUserName());
+	
+	viewContacts(users);
+}
+	
 	
 	
 	
@@ -188,6 +382,7 @@ function documentLinks() {
 
 
 
+
 var xmlHttpObject = function() {
 	try {
 		return new XMLHttpRequest();
@@ -219,6 +414,8 @@ function screenWidth() {
 
 
 
+
+
 function hide(ele_id) {
 	element(ele_id).style.display = "none";	
 }
@@ -226,6 +423,10 @@ function hide(ele_id) {
 function show(ele_id) {
 	element(ele_id).style.display = "visible";
 }
+
+
+
+
 
 
 
@@ -275,6 +476,7 @@ function sendCall(phone_number) {
 	}
 	var num,phoneNum;
 }
+
 
 
 
@@ -371,6 +573,12 @@ function viewMap(position) {
 
 
 
+
+
+
+
+
+
 // @param method The function to execute
 // @param count The number of seconds
 function doInterval(method,count) {
@@ -387,6 +595,10 @@ function stopInterval(object) {
 	clearInterval(object);
 	object = 0;
 }
+
+
+
+
 
 
 
@@ -432,6 +644,10 @@ function addAttribute(theProperty, theValue, theElement) {
 			+ "\n" + error);
 	}
 }
+
+
+
+
 
 
 
@@ -495,6 +711,10 @@ function cap(str) { return str.substring(0,1).toUpperCase() + str.substring(1); 
 
 
 
+
+
+
+
 //  ------------------------------------------------------------------------------
 function size(object) {
 	if (isArray(object)) {
@@ -520,6 +740,8 @@ function isArray(obj) {
 	return (obj instanceof Array);
 }
 //  ------------------------------------------------------------------------------
+
+
 
 
 
@@ -949,4 +1171,242 @@ function dateObjects() {
 			day:suffix(d.getDate('Greenwich Mean Time'))
 		};
 	return null;
+}
+
+
+
+
+
+
+
+
+// classes
+class Person {	
+	constructor(f,l,m) {
+		if (null === f || !f) {
+			throw new Error('First name is required');
+			return;
+		}
+		
+		if (null === l || !l) {
+			throw new Error('Last name is required');
+			return;
+		}
+		
+		if (null === m || !m) {
+			this.middleName = '';
+		} else {
+			this.middleName = cfc(m) + ' ';
+		}
+		
+		this.firstName = cfc(f) + ' ';
+		this.lastName = cfc(l) + ' ';		
+	}
+	
+	setFirstName(fname) {
+		if (null === fname || !fname) {
+			throw new Error('Provide a first name');
+		} else {
+			this.firstName = cfc(fname) + ' ';
+		}
+	}
+	
+	setLastName(lname) {
+		if (null === lname || !lname) {
+			throw new Error('Provide a last name');
+		} else {
+			this.lastName = cfc(lname) + ' ';
+		}
+	}
+	
+	setMiddleName(mname) {
+		this.middleName = cfc(mname) + ' ' || '';
+	}
+	
+	getFirstName() {
+		return this.firstName;
+	}
+	
+	getLastName() {
+		return this.lastName;
+	}
+	
+	getMiddleName() {
+		return this.middleName;
+	}
+	
+	getName() {
+		return this.getFirstName() + this.getMiddleName() + this.getLastName();
+	}
+	
+	toString() {
+		return this.getName();
+	}
+}
+
+class Contact extends Person {	
+	constructor(p, e, f, l, m) {
+		super(f,l,m);
+		
+		this.phones = {};
+		this.emails = {};		
+		
+		if (null === p || !p || !p.length || !Object.keys(p).length) {
+			throw new Error('Provide at least one phone number');
+		}
+		
+		if (null === e || !e || !e.length || !Object.keys(e).length) {
+			throw new Error('Provide at least one email address');
+		}
+		
+		// set phone
+		if (p instanceof Array) {
+			for (var i = 0; i<p.length; i++) {
+				if (i === 0) {
+					this.phones['primary'] = p[i];
+				} else {
+					var key = (Object.keys(this.phones).length + 1) + numSuf((Object.keys(this.phones).length + 1).toString()) + ' Phone';
+					this.phones[key] = p[i];
+				}
+			}
+		} else if (p instanceof Object && !(p instanceof Array)) {
+			for (var x in p) {
+				var xObj = p[x];
+				this.phones[x] = xObj;
+			}
+		} else {
+			this.phones['primary'] = p;
+		}
+		
+		// set email
+		if (e instanceof Array) {
+			for (var i = 0; i<e.length; i++) {
+				if (i === 0) {
+					this.emails['primary'] = e[i];
+				} else {
+					var key = (Object.keys(this.emails).length + 1) + numSuf((Object.keys(this.emails).length + 1).toString()) + ' Email';
+					this.emails[key] = e[i];
+				}
+			}
+		} else if (e instanceof Object && !(e instanceof Array)) {
+			for (var x in e) {
+				var xObj = e[x];
+				this.emails[x] = xObj;
+			}
+		} else {
+			this.emails['primary'] = e;
+		}		
+	}
+	
+	getEmails() {
+		return this.emails;
+	}
+		
+	getEmail(key) {
+		if (Object.prototype.hasOwnProperty.call(this.emails,key)) {
+			return this.emails[key];
+		}
+		return null;
+	}
+	
+	getPhones() {
+		return this.phones;
+	}
+		
+	getPhone(key) {
+		if (Object.prototype.hasOwnProperty.call(this.phones,key)) {
+			return this.phones[key];
+		}
+		return null;
+	}
+	
+	addEmail(category,email) {
+	if (null === category ||
+		!category ||
+		!category.length ||
+		typeof(category) !== 'string') {
+			throw new Error('Provide a category for this email address');
+		}
+		
+		if (null === email ||
+			!email ||
+			!email.length ||
+			typeof(email) !== 'string') {
+				throw new Error('Provide an email address');
+			}
+			
+		if (this.emails[category]) {
+			if (confirm('Do you want to replace the current ' + category + ' email address: ' + this.emails[category] + '?')) {
+				this.emails[category] = email;
+			} else {
+				var newKey = (Object.keys(this.emails).length + 1) + numSuf((Object.keys(this.emails).length + 1).toString()) + ' Email';
+				this.emails[newKey] = email;
+			}
+		} else {
+			this.emails[category] = email;
+		}
+	}
+	
+	addPhone(category,phone) {
+	if (null === category ||
+		!category ||
+		!category.length ||
+		typeof(category) !== 'string') {
+			throw new Error('Provide a category for this phone number');
+		}
+		
+		if (null === phone ||
+			!phone ||
+			!phone.length ||
+			typeof(phone) !== 'string') {
+				throw new Error('Provide a phone number');
+			}
+			
+		if (this.phones[category]) {
+			if (confirm('Do you want to replace the current ' + category + ' phone number: ' + this.phones[category] + '?')) {
+				this.phones[category] = phone;
+			} else {
+				var newKey = (Object.keys(this.phones).length + 1) + numSuf((Object.keys(this.phones).length + 1).toString()) + ' Phone';
+				this.phones[newKey] = phone;
+			}
+		} else {
+			this.phones[category] = phone;
+		}
+	}
+	
+	toString() { return super.toString(); }
+}
+
+class User extends Contact {
+	constructor(uname, p, e, f, l, m) {
+		super(p, e, f, l, m);
+		
+		if (null === uname || !uname) {
+			throw new Error('Provide a user name');
+		}
+
+		this.username = uname;
+	}
+	
+	setUserName(uname) {
+		if (uname.trim() === this.username.trim()) {
+			if (confirm('Are you sure that you want to replace the current Username ' + this.username + ' with ' + uname + '?')) {
+				this.username = uname;
+			}
+		} else {
+			if (this.username) {
+				if (confirm('Are you sure that you want to change the current username ' + this.username + ' to ' + uname + '?')) {
+					this.username = uname;
+				}
+			} else {
+				this.username = uname;
+			}
+		}
+	}
+	
+	getUserName() {
+		return this.username;
+	}
+	
+	toString() { return super.toString(); }
 }

@@ -104,7 +104,7 @@ class Person {
 	getName() {
 		return this.getFirstName() + this.getMiddleName() + this.getLastName();
 	}
-	
+		
 	setId(id) {
 		this.id = id;
 	}
@@ -117,10 +117,7 @@ class Person {
 class Contact extends Person {	
 	constructor(p, e, f, l, m) {
 		super(f,l,m);
-		
-		this.phones = {};
-		this.emails = {};		
-		
+				
 		if (null === p || !p || !p.length || !Object.keys(p).length) {
 			throw new Error('Provide at least one phone number');
 		}
@@ -130,42 +127,10 @@ class Contact extends Person {
 		}
 		
 		// set phone
-		if (p instanceof Array) {
-			for (var i = 0; i<p.length; i++) {
-				if (i === 0) {
-					this.phones['primary'] = p[i];
-				} else {
-					var key = (Object.keys(this.phones).length + 1) + numSuf((Object.keys(this.phones).length + 1).toString()) + ' Phone';
-					this.phones[key] = p[i];
-				}
-			}
-		} else if (p instanceof Object && !(p instanceof Array)) {
-			for (var x in p) {
-				var xObj = p[x];
-				this.phones[x] = xObj;
-			}
-		} else {
-			this.phones['primary'] = p;
-		}
+		this.setPhones(p);
 		
 		// set email
-		if (e instanceof Array) {
-			for (var i = 0; i<e.length; i++) {
-				if (i === 0) {
-					this.emails['primary'] = e[i];
-				} else {
-					var key = (Object.keys(this.emails).length + 1) + numSuf((Object.keys(this.emails).length + 1).toString()) + ' Email';
-					this.emails[key] = e[i];
-				}
-			}
-		} else if (e instanceof Object && !(e instanceof Array)) {
-			for (var x in e) {
-				var xObj = e[x];
-				this.emails[x] = xObj;
-			}
-		} else {
-			this.emails['primary'] = e;
-		}		
+		this.setEmails(e);		
 	}
 	
 	getEmails() {
@@ -244,6 +209,54 @@ class Contact extends Person {
 		}
 	}
 	
+	setEmails(e) {
+		this.emails = {};
+		
+		if (e instanceof Array) {
+			for (var i = 0; i<e.length; i++) {
+				if (i === 0) {
+					this.emails['primary'] = e[i];
+				} else {
+					var key = (Object.keys(this.emails).length + 1) + numSuf((Object.keys(this.emails).length + 1).toString()) + ' Email';
+					this.emails[key] = e[i];
+				}
+			}
+		} else if (e instanceof Object && !(e instanceof Array)) {
+			for (var x in e) {
+				var xObj = e[x];
+				this.emails[x] = xObj;
+			}
+		} else {
+			this.emails['primary'] = e;
+		}
+		
+		var size = Object.keys(this.emails).length;
+		this.emails['size'] = size;
+	}
+	
+	setPhones(p) {
+		this.phones = {};
+		
+		if (p instanceof Array) {
+			for (var i = 0; i<p.length; i++) {
+				if (i === 0) {
+					this.phones['primary'] = p[i];
+				} else {
+					var key = (Object.keys(this.phones).length + 1) + numSuf((Object.keys(this.phones).length + 1).toString()) + ' Phone';
+					this.phones[key] = p[i];
+				}
+			}
+		} else if (p instanceof Object && !(p instanceof Array)) {
+			for (var x in p) {
+				var xObj = p[x];
+				this.phones[x] = xObj;
+			}
+		} else {
+			this.phones['primary'] = p;
+		}
+		
+	}
+	
 	toString() { return super.toString(); }
 }
 
@@ -273,7 +286,7 @@ class User extends Contact {
 			}
 		}
 	}
-	
+		
 	getUserName() {
 		return this.username;
 	}
@@ -333,7 +346,6 @@ let membersManager = (function(){
 		if ((m instanceof User) && action === 'edit') {
 			console.log('Editing ' + m.getFirstName().trim() + ' ' + m.getLastName().trim());
 			var mObj = null;
-			
 			for (var i = 0; i < members['container'].length; i++) {							
 				if (m.id.toString() === members['container'][i].id.toString()) {
 					mObj =  members['container'][i];
@@ -348,9 +360,9 @@ let membersManager = (function(){
 					mObj.lastName = m.getLastName();
 					mObj.middleName = m.getMiddleName();
 					mObj.email = m.getEmail('primary');
-					// mObj.emails = m.emails;
+					mObj.emails = m.getEmails();
 					mObj.phone = m.getPhone('primary');
-					// mObj.phones = m.phones;
+					mObj.phones = m.getPhones();
 			}
 		}
 		
@@ -362,14 +374,6 @@ let membersManager = (function(){
 					var mObj = members['container'][i];
 					if (mObj.id.toString() === m) {
 						return [{'result':mObj}];
-					} else if (mObj.email.toString() === m) {
-						return [{'result':mObj}];
-					} else if (mObj.phone.toString() === m) {
-						return [{'result':mObj}];
-					} else if (mObj.username.toString() === m) {
-						return [{'result':mObj}];
-					} else {
-						return null;
 					}
 				}
 			}
@@ -379,13 +383,23 @@ let membersManager = (function(){
 			&& (action === 'remove' || action === 'delete')) {			
 			for (var i = 0; i < members['container'].length; i++) {
 				var mObj = members['container'][i];
-				if (mObj.id.toString() === m) {
+				if (mObj.id.toString() === m ||
+					mObj.uname.toString().trim() === m ||
+					mObj.email.toString() === m ||
+					mObj.phone.toString() === m) {
 					members['container'].splice(i,1);
 					break;
 				}
 			}
 		}
 		
+		if ((typeof(m) === 'string' && m === 'clean') && action === 'clear') {
+			for (var i = 0; i < members['container'].length; i++) {
+				members['container'].splice(i,1);
+			}
+			members['container'].splice(0,1);
+		}
+						
 		return members['container'];
 	}
 })();
@@ -413,8 +427,8 @@ module.exports = {
 		}
 	})(),
 	'findMember':(function(){
-		return function(id) {
-			
+		return function(searchCriteria = 'all', action='search') {
+			return membersManager(searchCriteria, action);
 		}
 	})(),
 	'editUser': (function(){
@@ -422,6 +436,11 @@ module.exports = {
 			let editUser = new User(u,p,e,f,l,m);
 			editUser.setId(i);
 			return editUser;
+		}
+	})(),
+	'clear': (function(){
+		return function(m = 'clean', action = 'clear') {
+			return membersManager(m,action);
 		}
 	})()
 }
