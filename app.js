@@ -51,8 +51,7 @@ app.post('/edit',function(req, res){
 		mname = req.body.middle_name || '',
 		email = req.body.email,
 		phone = req.body.phone,
-		editUser = db.editUser(id,uname,phone,email,fname,lname,mname);
-			
+		editUser = db.editUser(id,uname,phone,email,fname,lname,mname);			
 	db.editMember(editUser);
 	res.redirect('/');
 });

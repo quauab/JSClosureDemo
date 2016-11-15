@@ -362,6 +362,14 @@ let membersManager = (function(){
 					var mObj = members['container'][i];
 					if (mObj.id.toString() === m) {
 						return [{'result':mObj}];
+					} else if (mObj.email.toString() === m) {
+						return [{'result':mObj}];
+					} else if (mObj.phone.toString() === m) {
+						return [{'result':mObj}];
+					} else if (mObj.username.toString() === m) {
+						return [{'result':mObj}];
+					} else {
+						return null;
 					}
 				}
 			}
