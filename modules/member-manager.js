@@ -394,10 +394,9 @@ let membersManager = (function(){
 		}
 		
 		if ((typeof(m) === 'string' && m === 'clean') && action === 'clear') {
-			for (var i = 0; i < members['container'].length; i++) {
+			for (var i = -1; i < members['container'].length; i++) {
 				members['container'].splice(i,1);
 			}
-			members['container'].splice(0,1);
 		}
 						
 		return members['container'];
