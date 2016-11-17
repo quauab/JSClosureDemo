@@ -79,14 +79,10 @@ class Person {
 			return;
 		}
 		
-		if (null === m || !m) {
-			this.middleName = ' ';
-		} else {
-			this.middleName = cfc(m) + ' ';
-		}
+		this.middleName = cfc(m) + ' ' || '';
 		
-		this.firstName = cfc(f) + ' ';
-		this.lastName = cfc(l) + ' ';		
+		this.firstName = cfc(f);
+		this.lastName = cfc(l);		
 	}
 	
 	getFirstName() {
@@ -102,7 +98,7 @@ class Person {
 	}
 	
 	getName() {
-		return this.getFirstName() + this.getMiddleName() + this.getLastName();
+		return this.getFirstName() + ' ' + this.getMiddleName() + ' ' + this.getLastName();
 	}
 		
 	setId(id) {
