@@ -43,6 +43,24 @@ $(document).ready(function(){
 		}
 	});
 	
+	//*
+	$('.profile').on('click', function(){
+		var id = $(this).data('id'),
+			url = '/profile/' + id;
+		$.ajax({
+			url: url,
+			type: 'GET',
+			success: function(result) {
+				console.log('success');
+				window.location.href='/about';
+			},
+			error: function(err) {
+				console.log(err);
+			}
+		});
+	});
+	//*/
+	
 });
 
 function dateTime() {

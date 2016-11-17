@@ -415,6 +415,7 @@ module.exports = {
 	'addMember':(function(){
 		return function(u,p,e,f,l,m) {
 			var newUser = new User(u,p,e,f,l,m);
+			newUser.addEmail('secondary','dumb@ass.net');
 			return membersManager(newUser,'add');
 		}
 	})(),

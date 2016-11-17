@@ -1,0 +1,55 @@
+{>"layout" /}
+
+{<body}
+	<div class="row profileBody well">
+		<h3 class="header">{user.name}</h3>
+		<div  class="col-md-6">
+		<form method="post" action="/edit">
+			<div>
+				<input type="hidden" id="edit-form-id" name="id" />
+
+				<div class="form-group">
+					<label>First Name</label>
+					<input type="text" class="form-control" id="edit-form-first_name" name="first_name" value="{user.firstName}" required />
+				</div>
+
+				<div class="form-group">
+					<label>Last Name</label>
+					<input type="text" class="form-control" id="edit-form-last_name" name="last_name" value="{user.lastName}" required />
+				</div>
+
+				<div class="form-group">
+					<label>Middle Name</label>
+					<input type="text" class="form-control" id="edit-form-middle_name" name="middle_name" value="{user.middleName}" />
+				</div>
+			
+				<div class="form-group">
+					<label>Username</label>
+					<input type="text" class="form-control" id="edit-form-username" name="username" value="{user.uname}" required />
+				</div>
+
+				<div class="form-group">
+					<label>Primary Email</label>
+					<input type="email" class="form-control" id="edit-form-email" name="email" value="{user.email}" required />
+				</div>
+
+				<div class="form-group">
+					<label>Primary Phone</label>
+					<input type="phone" class="form-control" id="edit-form-phone" name="phone" value="{user.phone}" required />
+				</div>			
+			</div>
+			<br/>
+			<div class="modal-footer about">
+				<input type="submit" class="btn btn-primary" value="Save" />
+			</div>
+		</form>
+		</div>
+		<div class="col-md-6">
+			<h3>Emails</h3>
+			<ul>
+				{#emails}<li>{.}</li>{/emails}
+			</ul>
+		</div>		
+		</div>
+	</div>
+{/body}

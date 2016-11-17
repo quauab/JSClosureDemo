@@ -5,7 +5,9 @@ var express = require('express'),
 	dust = require('dustjs-helpers'),
 	db = require('./modules/member-manager.js'),
 	app = express();
-
+	
+var user = null;
+	
 // View engine
 app.engine('dust',cons.dust);
 
@@ -23,6 +25,28 @@ app.use(bodyParser.urlencoded({extended: false}));
 // Routes
 app.get('/',function(req, res){
 	res.render('index',{members:db.members});
+});
+
+app.get('/profile/:id', function(req, res, next) {
+	var id = req.params.id.toString() || null;
+	user = db.findMember(id,'search') || null;
+	var emails = [],
+		phones = [];
+		
+	for (var e in user.emails) {
+		var email = user.emails[e];
+		emails.push(email);
+	}
+	
+	for (var p in user.phones) {
+		var phone = user.phones[p];
+		phones.push(phone);
+	}
+	res.render('about',{user:user,emails:emails,phones:phones});
+});
+
+app.get('/about', function(req, res){
+	res.render('about',{user:user});
 });
 
 app.post('/add',function(req, res){

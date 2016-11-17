@@ -13,7 +13,9 @@ div>p {
 	font:normal 14pt georgian;
 }
 
-
+label {
+	font:normal 18px garamond;
+}
 
 
 
@@ -21,6 +23,15 @@ div>p {
 .left {
 	height:50vh;
 	width:30vw;
+}
+
+.profileBody {
+	margin-left:auto;
+	margin-right:auto;
+}
+
+.about {
+	text-align:center;
 }
 
 .panel-body, li{
@@ -38,8 +49,19 @@ div>p {
 	overflow:scroll;
 }
 
+.profile {
+	cursor:pointer;
+	text-decoration:none;
+}
+
+.profile:hover {
+	text-decoration:underline;
+}
 	
-	
+.header {
+	text-align:center;
+	font:normal 22px Georgia;
+}
 	
 	
 	

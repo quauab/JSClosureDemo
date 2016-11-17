@@ -52,9 +52,17 @@ describe('Users', function() {
 			assert.equal('Mname2', users[2].middleName.trim());
 			assert.equal('anotheruser@new.net', users[2].email);
 			assert.equal('333-555-7777', users[2].phone);
-			assert.equal('newuser2', users[2].uname.trim());		
+			assert.equal('newuser2', users[2].uname.trim());
 			
 			assert.equal(3,users.length);
+		});
+	});
+});
+
+describe('Users', function() {	
+	describe('Search for two User objects and test their inequality', function() {
+		it('Should return return false', function() {				
+			assert.notDeepEqual(db.findMember('newuser1'),db.findMember('newuser2'));
 		});
 	});
 });
